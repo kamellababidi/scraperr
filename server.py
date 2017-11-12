@@ -3,13 +3,6 @@ import urllib
 app = Flask(__name__, static_url_path='', static_folder='build')
 app.add_url_rule('/', 'root', lambda: app.send_static_file('index.html'))
 
-
-#read url data 
-link = " http://www.purplemath.com/ "
-f = urllib.urlopen(link)
-myfile = f.read()
-print (myfile)
-
 #handel signup request 
 @app.route('/signup', methods=['POST']) 
 def foo():
