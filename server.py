@@ -73,7 +73,7 @@ def foo():
    # rv = cursor.fetchall()
    # print(rv)
    # cursor.execute('''insert into user (username,password,email) values (request.form['username'],request.form['password'],request.form['email'])''')
-   return json.dumps(request.json)
+   return json.dumps("done")
 
 if __name__ == '__main__':
    app.run(debug=True)

@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 class Signup extends Component {
+  constructor(props){
+    super(props);
+  }
   render() {
     return (
       <div>
@@ -8,7 +11,7 @@ class Signup extends Component {
     		<input name="username" type="text" placeholder="Username"/><br/><br/>
      		<input name="password" type="password" placeholder="Password"/><br/><br/>
       		<input name="email" type="email" placeholder="Email Address"/><br/><br/>
-   		   	<button>Register</button>
+   		   	<button onClick={()=>this.props.kamel("Login")}>Register</button>
    		</form>
    		</div>
     );
