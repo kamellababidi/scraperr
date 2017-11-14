@@ -3,9 +3,11 @@ import requests
 from flask.ext.mysql import MySQL
 #import lxml.html
 import re
-
-
+from flask_cors import CORS
+import jsonify
 app = Flask(__name__, static_folder='build')
+CORS(app)
+
 app.add_url_rule('/', 'root', lambda: app.send_static_file('index.html'))
 
 
@@ -52,12 +54,21 @@ urls=re.findall(r'<a href=(.*?)>',str(url.text))
 #    print(unit)
 #    print("-------------------------------")
 
+#send data to frontend
+@app.route('/data', methods=['GET']) 
+def fooo():
+	print("geeeeeet")
+	return jsonify(units)
+
+
 #handel signup request 
 @app.route('/signup', methods=['POST']) 
 def foo():
-   print(request.form['username'])
-   print(request.form['password'])
-   print(request.form['email'])
+   # print("hello!!")
+   # print(request.json)
+   # print(request.json['user']['username'])
+   # print(request.form['password'])
+   # print(request.form['email'])
    conn = mysql.connect()
    cursor = conn.cursor()
    cursor.execute(
@@ -66,8 +77,12 @@ def foo():
             name,
             password,
             email)
-    VALUES (%s,%s,%s)""", (request.form['username'], request.form['password'], request.form['email']))
+    VALUES (%s,%s,%s)""", (request.json['user']['username'], request.json['user']['password'], request.json['user']['email']))
    data = cursor.fetchall()
+
+
+
+
    # print(data)
    # cursor.execute('''SELECT name FROM user''')
    # rv = cursor.fetchall()
