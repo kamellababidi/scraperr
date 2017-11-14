@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,json,request
 import requests
 from flask.ext.mysql import MySQL
 #import lxml.html
@@ -12,12 +12,19 @@ app.add_url_rule('/', 'root', lambda: app.send_static_file('index.html'))
 mysql = MySQL()
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = '1234'
-app.config['MYSQL_DATABASE_DB'] = 'users'
+app.config['MYSQL_DATABASE_DB'] = 'math'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
-conn = mysql.connect()
-cursor = conn.cursor()
- cursor.execute('''CREATE TABLE collections (units varchar(255), chapters varchar(255), links_name varchar(200) ,links varchar(200))''')
+
+
+
+#create collections table
+ # cursor.execute('''CREATE TABLE collections (units varchar(255), chapters varchar(255), links_name varchar(200) ,links varchar(200))''')
+
+#create users table
+# cursor.execute('''CREATE TABLE user (name varchar(255), password varchar(255), email varchar(200))''')
+
+
 # data = cursor.fetchall()
 # print(data)
 
@@ -43,13 +50,30 @@ urls=re.findall(r'<a href=(.*?)>',str(url.text))
     #unit=unit.text_content()
     #unit=re.findall(r'Unit [1-9]: (.*)',str(unit))
 #    print(unit)
-#    print("----------------------------------")
+#    print("-------------------------------")
 
 #handel signup request 
 @app.route('/signup', methods=['POST']) 
 def foo():
-   print('Hello world!')
+   print(request.form['username'])
+   print(request.form['password'])
+   print(request.form['email'])
+   conn = mysql.connect()
+   cursor = conn.cursor()
+   cursor.execute(
+    """INSERT INTO 
+        user (
+            name,
+            password,
+            email)
+    VALUES (%s,%s,%s)""", (request.form['username'], request.form['password'], request.form['email']))
+   data = cursor.fetchall()
+   # print(data)
+   # cursor.execute('''SELECT name FROM user''')
+   # rv = cursor.fetchall()
+   # print(rv)
+   # cursor.execute('''insert into user (username,password,email) values (request.form['username'],request.form['password'],request.form['email'])''')
    return json.dumps(request.json)
 
 if __name__ == '__main__':
-   app.run()
+   app.run(debug=True)
